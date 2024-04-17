@@ -3,7 +3,6 @@ import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GetServerSideProps } from "next";
 
 import React from "react";
 import { columns, users } from "./data";
