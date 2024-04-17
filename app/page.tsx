@@ -1,74 +1,81 @@
-"use client";
-
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon, Tether, Naira } from "@/components/icons";
+import { GetServerSideProps } from "next";
+
 import React from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  User,
-  Chip,
-  Tooltip,
-  getKeyValue,
-} from "@nextui-org/react";
 import { columns, users } from "./data";
+import TableCoponent from "./table";
 
-export default function Home() {
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+const kucoinSell =
+  "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=10&side=SELL&amount=&payTypeCodes=&lang=en_US";
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            // description={user.email}
-            name={cellValue}
-          >
-            {/* {user.email} */}
-          </User>
-        );
-      case "selling":
-        return (
-          <Chip
-            className="capitalize"
-            color={"warning"}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "buying":
-        return (
-          <Chip
-            className="capitalize"
-            color={"success"}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "volume":
-        return (
-          <div className="relative flex items-center gap-2 text-md">
-            {cellValue}
-          </div>
-        );
-      default:
-      // return cellValue;
-    }
-  }, []);
+const kucoinBuy =
+  "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=10&side=BUY&amount=&payTypeCodes=&lang=en_US";
+
+export default async function Home() {
+  const buyEndpoint = async () => {
+    const res = await fetch(kucoinBuy);
+    return res.json();
+  };
+
+  const sellEndpoint = async () => {
+    const res = await fetch(kucoinSell);
+    return res.json();
+  };
+
+  const populateMappedData = async () => {
+    const [kucoinBuydata, kucoinSelldata] = await Promise.all([
+      buyEndpoint(),
+      sellEndpoint(),
+    ]);
+
+    // const buyItem = kucoinBuydata.items.find(
+    //   (item) => item.currencyBalanceQuantity > 10
+    // );
+    // const sellItem = kucoinSelldata.items.find(
+    //   (item) => item.currencyBalanceQuantity > 10
+    // );
+    // console.log("buy", kucoinBuydata.items);
+
+    const buyItem = kucoinBuydata.items[0];
+    const sellItem = kucoinSelldata.items[0];
+
+    const buy = buyItem?.floatPrice;
+    const buyVolume = buyItem?.currencyBalanceQuantity;
+    const buyNickName = buyItem.nickName;
+    const sell = sellItem?.floatPrice;
+    const sellVolume = sellItem?.currencyBalanceQuantity;
+    const sellNickName = sellItem.nickName;
+
+    return {
+      id: 1,
+      name: "Kucoin",
+      buy,
+      buyVolume,
+      sell,
+      sellVolume,
+      sellNickName,
+      buyNickName,
+    };
+  };
+
+  const mappedData = await populateMappedData();
+  console.log(mappedData);
+
+  //   const updateData = async () => {
+  //     const mappedData = await populateMappedData();
+  //     console.log(mappedData);
+
+  //     // Call the function recursively after a delay to continue polling
+  //     setTimeout(updateData, 10000); // Update every second
+  //   };
+
+  //   // Initial call to start the polling process
+  //   updateData();
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-4 md:py-4">
       <div className="inline-block max-w-lg text-center justify-center">
@@ -77,27 +84,7 @@ export default function Home() {
         <h1 className={title()}>Exchange Rate &nbsp;</h1>
         <br />
       </div>
-      <Table aria-label="Example table with custom cells">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={users}>
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <TableCoponent columns={columns} users={[mappedData]} />
     </section>
   );
 }
