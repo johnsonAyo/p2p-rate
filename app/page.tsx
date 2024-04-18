@@ -21,8 +21,16 @@ export default async function Home() {
     const buyPath = [...exchange.dataPath, ...(exchange.buyItemPath || [])]; // Combine dataPath and buyItemPath
     const sellPath = [...exchange.dataPath, ...(exchange.sellItemPath || [])]; // Combine dataPath and sellItemPath
 
-    const buyItems = traverseData(buyData, buyPath);
-    const sellItems = traverseData(sellData, sellPath);
+    let buyItems, sellItems;
+    const needsFiltering = exchange.mergedEndpoint;
+
+    if (needsFiltering) {
+      buyItems = buyData.filter((item: any) => item.type === "BUY");
+      sellItems = sellData.filter((item: any) => item.type === "SELL");
+    } else {
+      buyItems = traverseData(buyData, buyPath); // Assuming nested buy data
+      sellItems = traverseData(sellData, sellPath); // Assuming nested sell data
+    }
 
     const buyItem = buyItems.find(
       (item: any) => item[exchange.buyVolumeProperty] > 100
@@ -35,18 +43,18 @@ export default async function Home() {
       id: exchanges.indexOf(exchange) + 1,
       avatar: exchange.avatar, // Use avatar from exchange object
       name: exchange.name,
-      buy:
-        formatPriceWithCommas(buyItem?.[exchange.buyPriceProperty]) ||
-        "Not Available",
-      buyVolume:
-        formatNumberWithCommas(buyItem?.[exchange.buyVolumeProperty]) ||
-        "Not Available",
-      sell:
-        formatPriceWithCommas(sellItem?.[exchange.sellPriceProperty]) ||
-        "Not Available",
-      sellVolume:
-        formatNumberWithCommas(sellItem?.[exchange.sellVolumeProperty]) ||
-        "Not Available",
+      buy: buyItem
+        ? formatPriceWithCommas(buyItem?.[exchange.buyPriceProperty])
+        : "Not Available",
+      buyVolume: buyItem
+        ? formatNumberWithCommas(buyItem?.[exchange.buyVolumeProperty])
+        : "Not Available",
+      sell: sellItem
+        ? formatPriceWithCommas(sellItem?.[exchange.sellPriceProperty])
+        : "Not Available",
+      sellVolume: sellItem
+        ? formatNumberWithCommas(sellItem[exchange.sellVolumeProperty])
+        : "Not Available",
     };
 
     return formattedData;
@@ -59,7 +67,7 @@ export default async function Home() {
       maximumFractionDigits: 0, // No decimals
     });
 
-    return formatted_number;
+    return formatted_number || "Not Available";
   }
 
   function formatPriceWithCommas(numberStr: any) {
@@ -69,7 +77,7 @@ export default async function Home() {
       return numberStr;
     }
 
-    return number.toFixed(2);
+    return number.toFixed(2) || "Not Available";
   }
 
   function traverseData(data: any, path: any) {
@@ -77,12 +85,14 @@ export default async function Home() {
       return data;
     }
     let current = data;
+
     for (const key of path) {
       current = current[key];
       if (!current) {
         return null; // Handle cases where a step in the path is missing
       }
     }
+
     return current;
   }
 

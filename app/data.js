@@ -27,9 +27,9 @@ const paxfulBuy =
 const paxfulSell =
   "https://paxful.com/rest/v1/offers?transformResponse=camelCase&withFavorites=false&crypto_currency_id=4&is_payment_method_localized=0&visitor_country_has_changed=false&users_country_iso=NG&visitor_country_iso=NG&currency=NGN&payment-method%5B0%5D=bank-transfer&type=buy";
 
-const dexpaySell = "https://api.dexpay.io/trades?show-overview=true?type=BUY";
+const dexpaySell = "https://api.dexpay.io/trades?show-overview=true";
 
-const dexpayBuy = "https://api.dexpay.io/trades?show-overview=true?type=SELL";
+const dexpayBuy = "https://api.dexpay.io/trades?show-overview=true";
 
 const localCoinSwapBuy =
   "https://iapi.localcoinswap.com/api/v2/offers/search/?trading_type=sell&coin_currency=USDT-BEP20&payment_method=bank-transfers&country_code=NG&ordering=country_first%2C-reputation%2Ccurrent_price_usd&offset=0&limit=10";
@@ -50,17 +50,6 @@ const noonesSell =
 
 const exchanges = [
   {
-    avatar: "https://www.svgrepo.com/show/331460/kucoin.svg",
-    name: "Kucoin",
-    buyPriceProperty: "floatPrice",
-    sellPriceProperty: "floatPrice",
-    buyEndpoint: kucoinBuy,
-    sellEndpoint: kucoinSell,
-    dataPath: ["items"], // Empty path for Kucoin (direct access)
-    buyVolumeProperty: "currencyBalanceQuantity",
-    sellVolumeProperty: "currencyBalanceQuantity",
-  },
-  {
     avatar: "https://upload.wikimedia.org/wikipedia/commons/e/e4/OKX_Logo.svg",
     name: "OKX",
     buyEndpoint: okexBuy,
@@ -74,18 +63,6 @@ const exchanges = [
     sellPriceProperty: "price",
   },
 
-  // {
-  //   avatar:
-  //     "https://miro.medium.com/v2/resize:fit:450/1*yWHLLCLKSBYZXofi_FtFrQ.jpeg",
-  //   name: "Dexpay",
-  //   buyEndpoint: dexpayBuy,
-  //   sellEndpoint: dexpaySell,
-  //   dataPath: [],
-  //   buyVolumeProperty: "quantityAvailable",
-  //   sellVolumeProperty: "quantityAvailable",
-  //   buyPriceProperty: "price",
-  //   sellPriceProperty: "price",
-  // },
   {
     avatar:
       "https://cryptodaily.blob.core.windows.net/space/htx%201920%20X%201080.jpg",
@@ -110,6 +87,31 @@ const exchanges = [
     dataPath: ["data"], // Empty path for Kucoin (direct access)
     buyVolumeProperty: "fiatAmountRangeMax",
     sellVolumeProperty: "fiatAmountRangeMax",
+  },
+  {
+    avatar:
+      "https://miro.medium.com/v2/resize:fit:450/1*yWHLLCLKSBYZXofi_FtFrQ.jpeg",
+    name: "Dexpay",
+    buyEndpoint: dexpayBuy,
+    sellEndpoint: dexpaySell,
+    mergedEndpoint: true,
+    dataPath: [],
+    buyVolumeProperty: "quantityAvailable",
+    sellVolumeProperty: "quantityAvailable",
+    buyPriceProperty: "price",
+    sellPriceProperty: "price",
+  },
+
+  {
+    avatar: "https://www.svgrepo.com/show/331460/kucoin.svg",
+    name: "Kucoin",
+    buyPriceProperty: "floatPrice",
+    sellPriceProperty: "floatPrice",
+    buyEndpoint: kucoinBuy,
+    sellEndpoint: kucoinSell,
+    dataPath: ["items"], // Empty path for Kucoin (direct access)
+    buyVolumeProperty: "currencyBalanceQuantity",
+    sellVolumeProperty: "currencyBalanceQuantity",
   },
   {
     avatar:
