@@ -25,10 +25,10 @@ export default async function Home() {
     const sellItems = traverseData(sellData, sellPath);
 
     const buyItem = buyItems.find(
-      (item: any) => item[exchange.buyVolumeProperty] > 200
+      (item: any) => item[exchange.buyVolumeProperty] > 100
     );
     const sellItem = sellItems?.find(
-      (item: any) => item[exchange.sellVolumeProperty] > 200
+      (item: any) => item[exchange.sellVolumeProperty] > 100
     );
 
     const formattedData = {
@@ -55,12 +55,6 @@ export default async function Home() {
 
     return formatted_number;
   }
-
-  // function formatPriceWithCommas(number: any) {
-  //   const formattedNumber = number.toFixed(2);
-
-  //   return formattedNumber.replace(".", ",");
-  // }
 
   function formatPriceWithCommas(numberStr: any) {
     let number = parseFloat(numberStr);
