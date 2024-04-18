@@ -35,12 +35,18 @@ export default async function Home() {
       id: exchanges.indexOf(exchange) + 1,
       avatar: exchange.avatar, // Use avatar from exchange object
       name: exchange.name,
-      buy: formatPriceWithCommas(buyItem?.[exchange.buyPriceProperty]),
-      buyVolume: formatNumberWithCommas(buyItem?.[exchange.buyVolumeProperty]),
-      sell: formatPriceWithCommas(sellItem?.[exchange.sellPriceProperty]),
-      sellVolume: formatNumberWithCommas(
-        sellItem?.[exchange.sellVolumeProperty]
-      ),
+      buy:
+        formatPriceWithCommas(buyItem?.[exchange.buyPriceProperty]) ||
+        "Not Available",
+      buyVolume:
+        formatNumberWithCommas(buyItem?.[exchange.buyVolumeProperty]) ||
+        "Not Available",
+      sell:
+        formatPriceWithCommas(sellItem?.[exchange.sellPriceProperty]) ||
+        "Not Available",
+      sellVolume:
+        formatNumberWithCommas(sellItem?.[exchange.sellVolumeProperty]) ||
+        "Not Available",
     };
 
     return formattedData;

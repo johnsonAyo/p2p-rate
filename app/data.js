@@ -13,10 +13,10 @@ const kucoinBuy =
   "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=50&side=SELL";
 
 const okexBuy =
-  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=sell&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
+  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=buy&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
 
 const okexSell =
-  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=buy&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
+  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=sell&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
 
 const htxBuy =
   "https://www.htx.com/-/x/otc/v1/data/trade-market?coinId=2&currency=15&tradeType=sell&currPage=1&payMethod=0&acceptOrder=0&country=&blockType=general&online=1&range=0&amount=&onlyTradable=false&isFollowed=false";
@@ -68,8 +68,8 @@ const exchanges = [
     dataPath: ["data"], // Common path for both buy/sell in OKX
     buyVolumeProperty: "availableAmount",
     sellVolumeProperty: "availableAmount",
-    buyItemPath: ["sell"], // Additional path for buy items in OKX
-    sellItemPath: ["buy"], // Additional path for sell items in OKX
+    buyItemPath: ["buy"],
+    sellItemPath: ["sell"],
     buyPriceProperty: "price",
     sellPriceProperty: "price",
   },
