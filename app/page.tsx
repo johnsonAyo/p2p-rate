@@ -72,7 +72,7 @@ export default async function Home() {
     return number.toFixed(2);
   }
 
-  function traverseData(data, path) {
+  function traverseData(data: any, path: any) {
     if (!path || !path.length) {
       return data;
     }

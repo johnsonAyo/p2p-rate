@@ -16,7 +16,7 @@ import {
 import { GithubIcon, Tether, Naira } from "@/components/icons";
 
 const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
-  const renderCell = React.useCallback((user, columnKey) => {
+  const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
@@ -71,7 +71,7 @@ const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
   return (
     <Table aria-label="Example table with custom cells">
       <TableHeader columns={columns}>
-        {(column) => (
+        {(column: any) => (
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
@@ -81,7 +81,7 @@ const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
         )}
       </TableHeader>
       <TableBody items={users}>
-        {(item) => (
+        {(item: any) => (
           <TableRow key={item.id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
