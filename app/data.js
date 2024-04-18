@@ -13,10 +13,10 @@ const kucoinBuy =
   "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=50&side=SELL";
 
 const okexBuy =
-  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=sell&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=5&t=1713294465668";
+  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=sell&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
 
 const okexSell =
-  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=buy&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=5&t=1713294465668";
+  "https://www.okx.com/v3/c2c/tradingOrders/getMarketplaceAdsPrelogin?side=buy&paymentMethod=all&userType=all&sortType=price_asc&limit=100&cryptoCurrency=USDT&fiatCurrency=NGN&currentPage=1&numberPerPage=20";
 
 const htxBuy =
   "https://www.htx.com/-/x/otc/v1/data/trade-market?coinId=2&currency=15&tradeType=sell&currPage=1&payMethod=0&acceptOrder=0&country=&blockType=general&online=1&range=0&amount=&onlyTradable=false&isFollowed=false";
