@@ -3,87 +3,100 @@ import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-
-import React from "react";
-import { columns, users } from "./data";
 import TableCoponent from "./table";
 
-const kucoinSell =
-  "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=10&side=SELL&amount=&payTypeCodes=&lang=en_US";
-
-const kucoinBuy =
-  "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=10&side=BUY&amount=&payTypeCodes=&lang=en_US";
+import React from "react";
+import { columns, exchanges } from "./data";
 
 export default async function Home() {
-  const buyEndpoint = async () => {
-    const res = await fetch(kucoinBuy);
+  async function fetchData(endpoint: any) {
+    const res = await fetch(endpoint);
     return res.json();
-  };
+  }
 
-  const sellEndpoint = async () => {
-    const res = await fetch(kucoinSell);
-    return res.json();
-  };
+  async function processExchangeData(exchange: any) {
+    const buyData = await fetchData(exchange.buyEndpoint);
+    const sellData = await fetchData(exchange.sellEndpoint);
 
-  const populateMappedData = async () => {
-    const [kucoinBuydata, kucoinSelldata] = await Promise.all([
-      buyEndpoint(),
-      sellEndpoint(),
-    ]);
+    const buyPath = [...exchange.dataPath, ...(exchange.buyItemPath || [])]; // Combine dataPath and buyItemPath
+    const sellPath = [...exchange.dataPath, ...(exchange.sellItemPath || [])]; // Combine dataPath and sellItemPath
 
-    // const buyItem = kucoinBuydata.items.find(
-    //   (item) => item.currencyBalanceQuantity > 10
-    // );
-    // const sellItem = kucoinSelldata.items.find(
-    //   (item) => item.currencyBalanceQuantity > 10
-    // );
-    // console.log("buy", kucoinBuydata.items);
+    const buyItems = traverseData(buyData, buyPath);
+    const sellItems = traverseData(sellData, sellPath);
 
-    const buyItem = kucoinBuydata.items[0];
-    const sellItem = kucoinSelldata.items[0];
+    const buyItem = buyItems.find(
+      (item: any) => item[exchange.buyVolumeProperty] > 200
+    );
+    const sellItem = sellItems?.find(
+      (item: any) => item[exchange.sellVolumeProperty] > 200
+    );
 
-    const buy = buyItem?.floatPrice;
-    const buyVolume = buyItem?.currencyBalanceQuantity;
-    const buyNickName = buyItem.nickName;
-    const sell = sellItem?.floatPrice;
-    const sellVolume = sellItem?.currencyBalanceQuantity;
-    const sellNickName = sellItem.nickName;
-
-    return {
-      id: 1,
-      name: "Kucoin",
-      buy,
-      buyVolume,
-      sell,
-      sellVolume,
-      sellNickName,
-      buyNickName,
+    const formattedData = {
+      id: exchanges.indexOf(exchange) + 1,
+      avatar: exchange.avatar, // Use avatar from exchange object
+      name: exchange.name,
+      buy: formatPriceWithCommas(buyItem?.[exchange.buyPriceProperty]),
+      buyVolume: formatNumberWithCommas(buyItem?.[exchange.buyVolumeProperty]),
+      sell: formatPriceWithCommas(sellItem?.[exchange.sellPriceProperty]),
+      sellVolume: formatNumberWithCommas(
+        sellItem?.[exchange.sellVolumeProperty]
+      ),
     };
-  };
 
-  const mappedData = await populateMappedData();
-  console.log(mappedData);
+    return formattedData;
+  }
 
-  //   const updateData = async () => {
-  //     const mappedData = await populateMappedData();
-  //     console.log(mappedData);
+  function formatNumberWithCommas(number: any) {
+    const number_without_decimals = parseInt(number);
+    const formatted_number = number_without_decimals.toLocaleString("en-US", {
+      minimumFractionDigits: 0, // No decimals
+      maximumFractionDigits: 0, // No decimals
+    });
 
-  //     // Call the function recursively after a delay to continue polling
-  //     setTimeout(updateData, 10000); // Update every second
-  //   };
+    return formatted_number;
+  }
 
-  //   // Initial call to start the polling process
-  //   updateData();
+  // function formatPriceWithCommas(number: any) {
+  //   const formattedNumber = number.toFixed(2);
+
+  //   return formattedNumber.replace(".", ",");
+  // }
+
+  function formatPriceWithCommas(numberStr: any) {
+    let number = parseFloat(numberStr);
+
+    if (isNaN(number)) {
+      return numberStr;
+    }
+
+    return number.toFixed(2);
+  }
+
+  function traverseData(data, path) {
+    if (!path || !path.length) {
+      return data;
+    }
+    let current = data;
+    for (const key of path) {
+      current = current[key];
+      if (!current) {
+        return null; // Handle cases where a step in the path is missing
+      }
+    }
+    return current;
+  }
+
+  const mappedData = await Promise.all(exchanges.map(processExchangeData));
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-4 md:py-4">
+    <section className="flex flex-col items-center justify-center gap-2 md:py-4">
       <div className="inline-block max-w-lg text-center justify-center">
         <h1 className={title()}>Real-Time P2P&nbsp;</h1>
         <h1 className={title({ color: "violet" })}>USDT to Naira&nbsp;</h1>
         <h1 className={title()}>Exchange Rate &nbsp;</h1>
         <br />
       </div>
-      <TableCoponent columns={columns} users={[mappedData]} />
+      <TableCoponent columns={columns} users={mappedData} />
     </section>
   );
 }

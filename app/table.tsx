@@ -35,7 +35,7 @@ const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
           <Chip
             className="capitalize"
             color={"warning"}
-            size="sm"
+            size="md"
             variant="flat"
           >
             {cellValue}
@@ -52,7 +52,7 @@ const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
           <Chip
             className="capitalize"
             color={"success"}
-            size="sm"
+            size="md"
             variant="flat"
           >
             {cellValue}
