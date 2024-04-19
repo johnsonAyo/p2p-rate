@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Table,
   TableHeader,
@@ -14,8 +13,44 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import { GithubIcon, Tether, Naira } from "@/components/icons";
+import React, { useState, useEffect } from "react";
 
 const TableCoponent = ({ columns, users }: { columns: any; users: any }) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null); // Reset error on new fetch attempt
+
+      try {
+        const response = await fetch(
+          "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=50&side=BUY"
+        );
+
+        if (!response) {
+          throw new Error(`Error fetching data: ${response}`);
+        }
+
+        console.log({ response });
+
+        const data = await response.json();
+        setData(data);
+      } catch (error: any) {
+        setError(error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log({ data });
+
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
