@@ -33,10 +33,10 @@ export default async function Home() {
     }
 
     const buyItem = buyItems.find(
-      (item: any) => item[exchange.buyVolumeProperty] > 100
+      (item: any) => item[exchange.buyVolumeProperty] > 500
     );
     const sellItem = sellItems?.find(
-      (item: any) => item[exchange.sellVolumeProperty] > 100
+      (item: any) => item[exchange.sellVolumeProperty] > 500
     );
 
     const formattedData = {
