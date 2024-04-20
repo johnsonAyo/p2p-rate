@@ -6,6 +6,14 @@ const columns = [
   { name: "BUY QUANTITY", uid: "buyVolume" },
 ];
 
+// const columns2 = [
+//   { name: "EXCHANGE NAME", uid: "name" },
+//   { name: "SELL PRICE", uid: "sell" },
+//   { name: "SELL QUANTITY", uid: "sellVolume" },
+//   { name: "BUY PRICE", uid: "buy" },
+//   { name: "BUY QUANTITY", uid: "buyVolume" },
+// ];
+
 const kucoinSell =
   "https://www.kucoin.com/_api/otc/ad/list?status=PUTUP&currency=USDT&legal=NGN&page=1&pageSize=50&side=BUY";
 
