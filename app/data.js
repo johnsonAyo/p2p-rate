@@ -84,6 +84,7 @@ const exchanges = [
     sellPriceProperty: "fiatPricePerBtc",
     buyEndpoint: paxfulBuy,
     sellEndpoint: paxfulSell,
+    range: true,
     dataPath: ["data"], // Empty path for Kucoin (direct access)
     buyVolumeProperty: "fiatAmountRangeMax",
     sellVolumeProperty: "fiatAmountRangeMax",
@@ -133,6 +134,7 @@ const exchanges = [
     sellPriceProperty: "price_formula_value",
     buyEndpoint: localCoinSwapSell,
     sellEndpoint: localCoinSwapBuy,
+    range: true,
     dataPath: ["results"], // Empty path for Kucoin (direct access)
     buyVolumeProperty: "max_trade_size",
     sellVolumeProperty: "max_trade_size",
@@ -145,6 +147,7 @@ const exchanges = [
     sellPriceProperty: "fiatPricePerBtc",
     buyEndpoint: noonesBuy,
     sellEndpoint: noonesSell,
+    range: true,
     dataPath: ["data"], // Empty path for Kucoin (direct access)
     buyVolumeProperty: "fiatAmountRangeMax",
     sellVolumeProperty: "fiatAmountRangeMax",
