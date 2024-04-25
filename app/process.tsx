@@ -44,25 +44,31 @@ export default async function processExchangeData(exchange: any) {
   const buyData = await fetchData(exchange.buyEndpoint);
   const sellData = await fetchData(exchange.sellEndpoint);
 
-  const buyPath = [...exchange.dataPath, ...(exchange.buyItemPath || [])]; // Combine dataPath and buyItemPath
-  const sellPath = [...exchange.dataPath, ...(exchange.sellItemPath || [])]; // Combine dataPath and sellItemPath
+  const buyPath = [...exchange.dataPath, ...(exchange.buyItemPath || [])];
+  const sellPath = [...exchange.dataPath, ...(exchange.sellItemPath || [])];
 
   let buyItems, sellItems;
   const needsFiltering = exchange.mergedEndpoint;
 
   if (needsFiltering) {
-    buyItems = buyData.filter((item: any) => item.type === "BUY");
-    sellItems = sellData.filter((item: any) => item.type === "SELL");
+    buyItems = buyData
+      .filter((item: any) => item.isVisible == true)
+      .filter((item: any) => item.type === "BUY");
+    sellItems = sellData
+      .filter((item: any) => item.isVisible == true)
+      .filter((item: any) => item.type === "SELL");
   } else {
     buyItems = traverseData(buyData, buyPath); // Assuming nested buy data
     sellItems = traverseData(sellData, sellPath); // Assuming nested sell data
   }
 
+  // console.log({ buyItems, sellItems });
+
   const buyItem = buyItems.find(
-    (item: any) => item[exchange.buyVolumeProperty] > 500
+    (item: any) => item[exchange.buyVolumeProperty] >= 200
   );
   const sellItem = sellItems?.find(
-    (item: any) => item[exchange.sellVolumeProperty] > 500
+    (item: any) => item[exchange.sellVolumeProperty] >= 200
   );
 
   const formattedData = {

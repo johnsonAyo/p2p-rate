@@ -35,9 +35,9 @@ const paxfulBuy =
 const paxfulSell =
   "https://paxful.com/rest/v1/offers?transformResponse=camelCase&withFavorites=false&crypto_currency_id=4&is_payment_method_localized=0&visitor_country_has_changed=false&users_country_iso=NG&visitor_country_iso=NG&currency=NGN&payment-method%5B0%5D=bank-transfer&type=buy";
 
-const dexpaySell = "https://api.dexpay.io/trades?show-overview=true";
+const dexpaySell = "https://api.dexpay.io/trades";
 
-const dexpayBuy = "https://api.dexpay.io/trades?show-overview=true";
+const dexpayBuy = "https://api.dexpay.io/trades";
 
 const localCoinSwapBuy =
   "https://iapi.localcoinswap.com/api/v2/offers/search/?trading_type=sell&coin_currency=USDT-BEP20&payment_method=bank-transfers&country_code=NG&ordering=country_first%2C-reputation%2Ccurrent_price_usd&offset=0&limit=10";
